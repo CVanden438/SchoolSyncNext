@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar from "../../../components/admin/sidebar";
+import AdminUserModal from "../../../components/admin/userModal";
 import AdminUsersTable from "../../../components/admin/usersTable";
 import { api } from "../../../utils/api";
 
@@ -12,6 +13,7 @@ const AdminUsers = () => {
       <div className="w-5/6">
         {usersData && <AdminUsersTable data={usersData} />}
       </div>
+      {/* <AdminUserModal /> */}
     </Sidebar>
   );
 };

@@ -24,7 +24,7 @@ const AdminSchoolsTable: React.FC<pageProps> = (props) => {
         <tbody>
           {props.data.map((d) => {
             return (
-              <tr>
+              <tr key={d.id}>
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
