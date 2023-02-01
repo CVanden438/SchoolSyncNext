@@ -1,0 +1,1 @@
+type role = "STUDENT" | "TEACHER";

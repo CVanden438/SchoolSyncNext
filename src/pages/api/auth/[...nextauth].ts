@@ -32,18 +32,18 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/auth/signin",
-    // error: '/auth/error',
+    // error: "/auth/signin",
     // signOut: '/auth/signout'
   },
   callbacks: {
-    jwt(params) {
+    jwt({ token, user }) {
       // update token
-      if (params.user?.role) {
-        params.token.role = params.user.role;
-        params.token.id = params.user.id;
+      if (user?.role) {
+        token.role = user.role;
+        token.id = user.id;
       }
       // return final_token
-      return params.token;
+      return token;
     },
     session({ session, token }) {
       if (session.user) {

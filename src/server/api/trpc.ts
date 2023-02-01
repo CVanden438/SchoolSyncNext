@@ -31,9 +31,9 @@ type CreateContextOptions = { session: Session | null };
  * - trpc's `createSSGHelpers` where we don't have req/res
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
-const createInnerTRPCContext = (_opts: CreateContextOptions) => {
+const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    session: _opts.session,
+    session: opts.session,
     prisma,
   };
 };
