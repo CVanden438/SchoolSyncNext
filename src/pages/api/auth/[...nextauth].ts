@@ -1,5 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "../../../server/db";
+import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -9,24 +11,37 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       type: "credentials",
       credentials: {},
-      authorize(credentials, req) {
+      async authorize(credentials, req) {
         const { email, password } = credentials as {
           email: string;
           password: string;
         };
-        // perform you login logic
-        // find out user from db
-        if (email !== "john@gmail.com" || password !== "1234") {
-          throw new Error("invalid credentials");
+        const userData = await prisma.user.findFirst({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            password: true,
+            role: true,
+            userName: true,
+          },
+        });
+        if (!userData) {
+          throw new Error("Invalid Credentials");
         }
-
-        // if everything is fine
-        return {
-          id: "1234",
-          name: "John Doe",
-          email: "john@gmail.com",
-          role: "admin",
+        bcrypt.compare(password, userData.password, function (err, result) {
+          if (err) {
+            throw new Error(err.message);
+          }
+        });
+        //renaming userName to user
+        const user = {
+          id: userData.id,
+          name: userData.userName,
+          role: userData.role,
+          email: userData.email,
         };
+        return user;
       },
     }),
   ],

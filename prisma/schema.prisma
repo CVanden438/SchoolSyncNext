@@ -25,7 +25,7 @@ model User {
     id      String  @id @default(cuid())
     userName String
     email   String
-    passwordHash String
+    password String
     role    Role
     createdAt DateTime @default(now())
     schoolId String

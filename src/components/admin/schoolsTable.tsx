@@ -6,7 +6,7 @@ type pageProps = {
 };
 const AdminSchoolsTable: React.FC<pageProps> = (props) => {
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="h-1/2 w-full overflow-x-auto overflow-y-auto">
       <table className="table w-full">
         <thead>
           <tr>

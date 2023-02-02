@@ -2,6 +2,7 @@ import { signIn, useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
+import { api } from "../../utils/api";
 export default function SignIn({}) {
   const { data } = useSession();
   const router = useRouter();

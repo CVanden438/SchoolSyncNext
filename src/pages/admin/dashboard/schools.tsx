@@ -9,7 +9,7 @@ const AdminSchools = () => {
   });
   return (
     <Sidebar>
-      <div className="w-5/6">
+      <div className="grid w-5/6 items-center">
         {schoolsData && <AdminSchoolsTable data={schoolsData} />}
       </div>
     </Sidebar>
