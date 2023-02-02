@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { RouterOutputs } from "../../utils/api";
+import Modal from "../modal";
+import EditUserModalContent from "./editUserModalContent";
 import AdminUserModal from "./userModal";
 
 type pageProps = {
@@ -9,8 +11,9 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
   const [modalProps, setModalProps] = useState<
     pageProps["data"][number] | null
   >(null);
+  const [editModal, setEditModal] = useState(false);
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="h-[600px] w-full overflow-x-auto">
       <table className="table w-full">
         <thead>
           <tr>
@@ -42,7 +45,7 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
                         <img
-                          src="/tailwind-css-component-profile-2@56w.png"
+                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
                           alt="Avatar Tailwind CSS Component"
                         />
                       </div>
@@ -54,26 +57,11 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
                 <th>{user.school.name}</th>
                 <th>{user.role}</th>
                 <th>
-                  {/* <button>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="green"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                      />
-                    </svg>
-                  </button> */}
-                  <label
-                    onClick={() => setModalProps(user)}
-                    htmlFor="admin-user-modal"
-                    className="cursor-pointer"
+                  <button
+                    onClick={() => {
+                      setModalProps(user);
+                      setEditModal(true);
+                    }}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +77,7 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
                         d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
                       />
                     </svg>
-                  </label>
+                  </button>
                 </th>
                 <th>
                   <button>
@@ -114,9 +102,12 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
           })}
         </tbody>
       </table>
-      {modalProps && (
+      {/* {modalProps && (
         <AdminUserModal data={modalProps as pageProps["data"][number]} />
-      )}
+      )} */}
+      <Modal shown={editModal} close={() => setEditModal(false)}>
+        <EditUserModalContent data={modalProps as pageProps["data"][number]} />
+      </Modal>
     </div>
   );
 };

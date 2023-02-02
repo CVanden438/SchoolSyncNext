@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import { api } from "../../utils/api";
+import Modal from "../../components/modal";
 export default function SignIn({}) {
   const { data } = useSession();
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function SignIn({}) {
   }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modal, setModal] = useState(false);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn("credentials", {
