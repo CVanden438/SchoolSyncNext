@@ -1,17 +1,30 @@
 import React, { useState } from "react";
-import { RouterOutputs } from "../../utils/api";
+import { api, RouterOutputs } from "../../utils/api";
 import Modal from "../modal";
 import EditUserModalContent from "./editUserModalContent";
 import AdminUserModal from "./userModal";
 
 type pageProps = {
   data: RouterOutputs["admin"]["getUsers"];
+  refetch: () => void;
 };
+
 const AdminUsersTable: React.FC<pageProps> = (props) => {
   const [modalProps, setModalProps] = useState<
     pageProps["data"][number] | null
   >(null);
   const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const deleteUser = api.admin.deleteUser.useMutation();
+  const handleDelete = async () => {
+    if (!deleteId) {
+      return;
+    }
+    await deleteUser.mutateAsync({ id: deleteId as string });
+    setDeleteModal(false);
+    props.refetch();
+  };
   return (
     <div className="h-[600px] w-full overflow-x-auto">
       <table className="table w-full">
@@ -80,7 +93,12 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
                   </button>
                 </th>
                 <th>
-                  <button>
+                  <button
+                    onClick={() => {
+                      setDeleteId(user.id);
+                      setDeleteModal(true);
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -106,7 +124,19 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
         <AdminUserModal data={modalProps as pageProps["data"][number]} />
       )} */}
       <Modal shown={editModal} close={() => setEditModal(false)}>
-        <EditUserModalContent data={modalProps as pageProps["data"][number]} />
+        <EditUserModalContent
+          close={setEditModal}
+          data={modalProps as pageProps["data"][number]}
+          refetch={props?.refetch}
+        />
+      </Modal>
+      <Modal shown={deleteModal} close={() => setDeleteModal(false)}>
+        <div className="flex flex-col gap-4">
+          <p className="text-lg">Are you sure you want to delete this user?</p>
+          <button className="btn m-auto w-1/2" onClick={handleDelete}>
+            DELETE USER
+          </button>
+        </div>
       </Modal>
     </div>
   );

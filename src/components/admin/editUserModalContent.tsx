@@ -1,14 +1,24 @@
 import React, { useState } from "react";
-import { RouterOutputs } from "../../utils/api";
+import { api, RouterOutputs } from "../../utils/api";
 
 type modalProps = {
   data: RouterOutputs["admin"]["getUsers"][number];
+  close: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
 };
 const EditUserModalContent: React.FC<modalProps> = (props) => {
-  // const {name,createdAt,email,id,role,school,schoolId,userName} = props.data
   const [name, setName] = useState(props.data?.userName);
   const [email, setEmail] = useState(props.data?.email);
   const [school, setSchool] = useState(props.data?.schoolId);
+  const editUser = api.admin.editUser.useMutation();
+  const handleEditUser = async () => {
+    if (!name || !email || !school) {
+      return;
+    }
+    await editUser.mutateAsync({ name, email, id: props?.data.id });
+    props.close(true);
+    props.refetch();
+  };
   return (
     <>
       <form className="flex flex-col gap-4">
@@ -44,7 +54,9 @@ const EditUserModalContent: React.FC<modalProps> = (props) => {
           onChange={(e) => setSchool(e.target.value)}
           className="h-12 rounded-lg bg-neutral-content pl-2 pr-2 pt-1 pb-1 text-lg"
         />
-        <button className="btn">Save Changes</button>
+        <button className="btn" onClick={handleEditUser}>
+          Save Changes
+        </button>
       </form>
     </>
   );

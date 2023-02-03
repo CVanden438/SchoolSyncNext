@@ -49,4 +49,32 @@ export const adminRouter = createTRPCRouter({
       },
     });
   }),
+  deleteUser: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.user.delete({
+        where: { id: input.id },
+      });
+    }),
+  editUser: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.user.update({
+        where: { id: input.id },
+        data: {
+          userName: input.name,
+          email: input.email,
+        },
+      });
+    }),
 });
