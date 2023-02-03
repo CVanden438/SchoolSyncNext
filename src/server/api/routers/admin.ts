@@ -77,4 +77,27 @@ export const adminRouter = createTRPCRouter({
         },
       });
     }),
+  deleteSchool: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.school.delete({
+        where: { id: input.id },
+      });
+    }),
+  editSchool: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        road: z.string(),
+        city: z.string(),
+        country: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.school.update({
+        where: { id: input.id },
+        data: { ...input },
+      });
+    }),
 });

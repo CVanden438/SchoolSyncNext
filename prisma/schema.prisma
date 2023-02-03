@@ -19,6 +19,7 @@ model Example {
 enum Role {
     STUDENT
     TEACHER
+    ADMIN
 }
 
 model User {
