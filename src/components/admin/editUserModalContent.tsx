@@ -54,7 +54,7 @@ const EditUserModalContent: React.FC<modalProps> = (props) => {
           onChange={(e) => setSchool(e.target.value)}
           className="h-12 rounded-lg bg-neutral-content pl-2 pr-2 pt-1 pb-1 text-lg"
         />
-        <button className="btn" onClick={handleEditUser}>
+        <button className="btn" onClick={() => handleEditUser}>
           Save Changes
         </button>
       </form>

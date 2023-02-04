@@ -6,6 +6,7 @@ type modalProps = {
   close: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
 };
+
 const EditSchoolModalContent: React.FC<modalProps> = (props) => {
   const [name, setName] = useState(props.data?.name);
   const [road, setRoad] = useState(props.data?.road);
@@ -71,7 +72,7 @@ const EditSchoolModalContent: React.FC<modalProps> = (props) => {
           onChange={(e) => setCountry(e.target.value)}
           className="h-12 rounded-lg bg-neutral-content pl-2 pr-2 pt-1 pb-1 text-lg"
         />
-        <button className="btn" onClick={handleEditSchool}>
+        <button className="btn" onClick={() => handleEditSchool}>
           Save Changes
         </button>
       </form>

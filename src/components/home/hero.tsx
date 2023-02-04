@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div
+    <section
       className="hero min-h-screen"
       style={{
         backgroundImage: `url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Hibbing_High_School_2014.jpg/1200px-Hibbing_High_School_2014.jpg")`,
@@ -20,7 +20,7 @@ const Hero = () => {
           <button className="btn-primary btn">Get Started</button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

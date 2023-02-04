@@ -5,7 +5,9 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import Hero from "../components/home/hero";
 import Footer from "../components/home/footer";
-
+import Features from "../components/home/features";
+import Pricing from "../components/home/pricing";
+import Testemonials from "../components/home/testemonials";
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery(
     { text: "from tRPC" },
@@ -18,10 +20,13 @@ const Home: NextPage = () => {
       <Head>
         <title>School Sync</title>
         <meta name="description" content="School Sync" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/haticon.png" />
       </Head>
       <main>
         <Hero />
+        <Features />
+        <Pricing />
+        <Testemonials />
         <Footer />
       </main>
     </>
