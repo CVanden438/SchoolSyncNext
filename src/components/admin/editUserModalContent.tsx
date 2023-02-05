@@ -5,20 +5,27 @@ type modalProps = {
   data: RouterOutputs["admin"]["getUsers"][number];
   close: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
+  role: string;
 };
 const EditUserModalContent: React.FC<modalProps> = (props) => {
   const [name, setName] = useState(props.data?.userName);
   const [email, setEmail] = useState(props.data?.email);
   const [school, setSchool] = useState(props.data?.schoolId);
-  const editUser = api.admin.editUser.useMutation();
+  const editStudent = api.admin.editStudent.useMutation({});
+  const editTeacher = api.admin.editTeacher.useMutation({});
   const handleEditUser = async () => {
     if (!name || !email || !school) {
       return;
     }
-    await editUser.mutateAsync({ name, email, id: props?.data.id });
-    props.close(true);
+    if (props?.role === "STUDENT") {
+      await editStudent.mutateAsync({ name, email, id: props?.data.id });
+    } else {
+      await editTeacher.mutateAsync({ name, email, id: props?.data.id });
+    }
     props.refetch();
+    props.close(true);
   };
+  console.log(props?.role);
   return (
     <>
       <form className="flex flex-col gap-4">
@@ -54,7 +61,7 @@ const EditUserModalContent: React.FC<modalProps> = (props) => {
           onChange={(e) => setSchool(e.target.value)}
           className="h-12 rounded-lg bg-neutral-content pl-2 pr-2 pt-1 pb-1 text-lg"
         />
-        <button className="btn" onClick={() => handleEditUser}>
+        <button className="btn" onClick={handleEditUser}>
           Save Changes
         </button>
       </form>

@@ -31,8 +31,37 @@ model User {
     createdAt DateTime @default(now())
     schoolId String
     school  School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
     @@index([schoolId])
+}
+
+model Student {
+    id      String  @id @default(cuid())
+    role    String  @default("STUDENT")
+    userName String
+    email   String
+    password String
+    createdAt DateTime @default(now())
+    schoolId String
+    school  School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    classRooms StudentToClassroom[]
+    messages Message[]
+    assignments StudentToAssignment[]
+    @@index([schoolId])
+}
+
+model Teacher {
+  id      String @id @default(cuid())
+  role    String @default("TEACHER")
+  userName String
+  email   String
+  password String
+  createdAt DateTime @default(now())
+  schoolId String
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  classrooms ClassRoom[]
+  messages Message[]
+  assignments Assignments[]
+  @@index([schoolId])
 }
 
 model School {
@@ -43,4 +72,66 @@ model School {
     city    String
     country String
     members User[]
+    teachers Teacher[]
+    students Student[]
+}
+
+model ClassRoom {
+  id      String @id @default(cuid())
+  day     String
+  time    String
+  teacherId String
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  students StudentToClassroom[]
+  @@index([teacherId])
+}
+
+model StudentToClassroom {
+  studentId String
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  classRoomId String
+  classroom ClassRoom @relation(fields: [classRoomId], references: [id] , onDelete: Cascade)
+  @@id([studentId,classRoomId])
+  @@index([studentId])
+  @@index([classRoomId])
+}
+
+model Message {
+  id      String @id @default(cuid())
+  text    String
+  studentId String?
+  student Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacherId String?
+  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@index([studentId])
+  @@index([teacherId])
+}
+
+model Assignments {
+  id      String @id @default(cuid())
+  teacherId String
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  Title   String
+  Description String
+  dueDate DateTime
+  students StudentToAssignment[]
+
+  @@index([teacherId])
+}
+
+model StudentToAssignment {
+  studentId String
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignmentId String
+  assignment Assignments @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submitted Boolean
+  @@id([studentId,assignmentId])
+  @@index([studentId])
+  @@index([assignmentId])
+}
+
+model Emails {
+  id      String @id @default(cuid())
 }

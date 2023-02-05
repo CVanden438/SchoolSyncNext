@@ -10,15 +10,25 @@ const Register = () => {
   const [schoolId, setSchoolId] = useState<string>("");
   const { data: schoolOptions } = api.auth.getSchoolOptions.useQuery();
   const register = api.auth.registerUser.useMutation({});
+  const registerStudent = api.auth.registerStudent.useMutation({});
+  const registerTeacher = api.auth.registerTeacher.useMutation({});
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await register.mutateAsync({
-      userName,
-      email,
-      password,
-      role,
-      schoolId,
-    });
+    if (role === "STUDENT") {
+      await registerStudent.mutateAsync({
+        userName,
+        email,
+        password,
+        schoolId,
+      });
+    } else {
+      await registerTeacher.mutateAsync({
+        userName,
+        email,
+        password,
+        schoolId,
+      });
+    }
   };
   return (
     <>
@@ -83,12 +93,11 @@ const Register = () => {
         <select
           id="school"
           className="select-bordered select-accent select w-full bg-neutral-content"
-          value={schoolId}
+          // value={schoolId}
+          defaultValue="Select your school"
           onChange={(e) => setSchoolId(e.target.value)}
         >
-          <option disabled selected>
-            Select your school
-          </option>
+          <option disabled>Select your school</option>
           {schoolOptions?.map((school) => {
             return (
               <option value={school.id} key={school.id}>

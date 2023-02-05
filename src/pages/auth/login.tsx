@@ -12,20 +12,42 @@ export default function SignIn({}) {
   }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modal, setModal] = useState(false);
+  const [role, setRole] = useState("STUDENT");
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn("credentials", {
       email,
       password,
+      role,
       redirect: false,
     });
   };
   return (
     <>
+      <section className="m-auto mt-20 flex w-5/6 flex-col justify-between gap-4 md:mt-40 md:w-1/2">
+        <p className=" text-center text-2xl text-neutral">Are you a....</p>
+        <div className="w-full">
+          <button
+            className={`btn w-1/2 ${
+              role === "STUDENT" ? "bg-primary" : "bg-accent"
+            }`}
+            onClick={() => setRole("STUDENT")}
+          >
+            Student
+          </button>
+          <button
+            className={`btn w-1/2 ${
+              role === "TEACHER" ? "bg-primary" : "bg-accent"
+            }`}
+            onClick={() => setRole("TEACHER")}
+          >
+            Teacher
+          </button>
+        </div>
+      </section>
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="m-auto mt-20 flex w-5/6 flex-col gap-4 md:mt-40 md:w-1/2"
+        className="m-auto flex w-5/6 flex-col gap-4 md:w-1/2"
       >
         <label htmlFor="email" className="text-xl font-bold text-neutral">
           Email

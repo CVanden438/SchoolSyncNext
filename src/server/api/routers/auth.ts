@@ -20,6 +20,38 @@ export const authRouter = createTRPCRouter({
         data: { ...input, password: passwordHash },
       });
     }),
+  registerStudent: publicProcedure
+    .input(
+      z.object({
+        userName: z.string(),
+        password: z.string(),
+        email: z.string(),
+        schoolId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(input.password, saltRounds);
+      return ctx.prisma.student.create({
+        data: { ...input, password: passwordHash },
+      });
+    }),
+  registerTeacher: publicProcedure
+    .input(
+      z.object({
+        userName: z.string(),
+        password: z.string(),
+        email: z.string(),
+        schoolId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(input.password, saltRounds);
+      return ctx.prisma.teacher.create({
+        data: { ...input, password: passwordHash },
+      });
+    }),
   // checkUserCredentials: publicProcedure
   //   .input(z.object({ email: z.string(), password: z.string() }))
   //   .query(async ({ ctx, input }) => {

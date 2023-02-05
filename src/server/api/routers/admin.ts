@@ -49,6 +49,40 @@ export const adminRouter = createTRPCRouter({
       },
     });
   }),
+  getStudents: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.student.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        schoolId: true,
+        userName: true,
+        school: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }),
+  getTeachers: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.teacher.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        schoolId: true,
+        userName: true,
+        school: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }),
   deleteUser: publicProcedure
     .input(
       z.object({
@@ -57,6 +91,28 @@ export const adminRouter = createTRPCRouter({
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.user.delete({
+        where: { id: input.id },
+      });
+    }),
+  deleteStudent: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.student.delete({
+        where: { id: input.id },
+      });
+    }),
+  deleteTeacher: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.teacher.delete({
         where: { id: input.id },
       });
     }),
@@ -70,6 +126,41 @@ export const adminRouter = createTRPCRouter({
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.user.update({
+        where: { id: input.id },
+        data: {
+          userName: input.name,
+          email: input.email,
+        },
+      });
+    }),
+  editStudent: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      console.log("hello");
+      return ctx.prisma.student.update({
+        where: { id: input.id },
+        data: {
+          userName: input.name,
+          email: input.email,
+        },
+      });
+    }),
+  editTeacher: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.teacher.update({
         where: { id: input.id },
         data: {
           userName: input.name,

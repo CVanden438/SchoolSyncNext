@@ -7,6 +7,7 @@ import AdminUserModal from "./userModal";
 type pageProps = {
   data: RouterOutputs["admin"]["getUsers"];
   refetch: () => void;
+  role: string;
 };
 
 const AdminUsersTable: React.FC<pageProps> = (props) => {
@@ -16,12 +17,17 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const deleteUser = api.admin.deleteUser.useMutation();
+  const deleteStudent = api.admin.deleteStudent.useMutation();
+  const deleteTeacher = api.admin.deleteTeacher.useMutation();
   const handleDelete = async () => {
     if (!deleteId) {
       return;
     }
-    await deleteUser.mutateAsync({ id: deleteId as string });
+    if (props?.role === "STUDENT") {
+      await deleteStudent.mutateAsync({ id: deleteId });
+    } else {
+      await deleteTeacher.mutateAsync({ id: deleteId });
+    }
     setDeleteModal(false);
     props.refetch();
   };
@@ -128,6 +134,7 @@ const AdminUsersTable: React.FC<pageProps> = (props) => {
           close={setEditModal}
           data={modalProps as pageProps["data"][number]}
           refetch={props?.refetch}
+          role={props?.role}
         />
       </Modal>
       <Modal shown={deleteModal} close={() => setDeleteModal(false)}>
